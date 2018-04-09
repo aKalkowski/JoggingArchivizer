@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.andrzejkalkowski.joggingarchivizer.OptionsActivity">
+
+    <TextView
+        android:id="@+id/activity_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/activity_label"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/weightView"
+        app:layout_constraintTop_toBottomOf="@+id/weightView" />
+
+    <Switch
+        android:id="@+id/night_mode_switch"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/night_mode"
+        android:textAlignment="textStart"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBaseline_toBaselineOf="@+id/weightView"
+        app:layout_constraintEnd_toEndOf="@+id/night_mode_switch"
+        app:layout_constraintStart_toEndOf="@+id/weightView" />
+
+    <TextView
+        android:id="@+id/weightView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/wight_label"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/night_mode_switch"
+        app:layout_constraintTop_toBottomOf="@+id/night_mode_switch" />
+
+    <Spinner
+        android:id="@+id/activity_options"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="@+id/edit_weight"
+        app:layout_constraintStart_toEndOf="@+id/activity_label"
+        tools:layout_editor_absoluteY="124dp" />
+
+</android.support.constraint.ConstraintLayout>

@@ -12,7 +12,6 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 public class DistanceService extends Service {
 
@@ -58,8 +57,6 @@ public class DistanceService extends Service {
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     1000, 1, listener);
-        } else {
-            Toast.makeText(this, R.string.gps_not_granted, Toast.LENGTH_SHORT).show();
         }
     }
 

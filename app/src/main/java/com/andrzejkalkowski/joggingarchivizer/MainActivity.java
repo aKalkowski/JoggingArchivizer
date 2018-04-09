@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -81,12 +82,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         Intent intent = new Intent(this, DistanceService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-
-
     }
 
     @Override
@@ -153,17 +158,5 @@ public class MainActivity extends AppCompatActivity {
         seconds = 0;
         distance = 0;
         calories = 0;
-    }
-
-    public int getSeconds() {
-        return seconds;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public double getDistance() {
-        return distance;
     }
 }
