@@ -9,7 +9,7 @@
         app:showAsAction="never"/>
 
     <item android:id="@+id/action_database"
-        android:title="@string/databse"
+        android:title="@string/database"
         android:orderInCategory="1"
         app:showAsAction="never"/>
 </menu>

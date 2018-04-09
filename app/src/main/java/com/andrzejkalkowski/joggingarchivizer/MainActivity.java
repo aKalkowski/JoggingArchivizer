@@ -1,18 +1,22 @@
 package com.andrzejkalkowski.joggingarchivizer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,6 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+
+    private AppCompatDelegate.NightMode nightMode;
 
     private int seconds = 0;
     private double speed = 0.0d;
@@ -29,12 +35,15 @@ public class MainActivity extends AppCompatActivity {
     private boolean wasRunning;
     private boolean bound = false;
     private DistanceService distanceService;
+    private SharedPreferences sharedPreferences;
+    public static final String PREFERENCES_NAME = "prefs";
+    public static final String PREFERENCES_NIGHT_MODE = "nightMode";
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             DistanceService.DistanceBinder binder = (DistanceService.DistanceBinder) service;
             distanceService = binder.getDistanceBinder();
-            if(!distanceService.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (!distanceService.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage(R.string.gps_not_enabled)
                         .setCancelable(false)
@@ -77,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
         runTimer();
         watchDistanceAndSpeed();
     }
@@ -85,6 +95,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, OptionsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     @Override
@@ -97,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(bound) {
+        if (bound) {
             unbindService(connection);
             bound = false;
         }
@@ -118,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 int secs = seconds % 60;
                 timerView.setText(
                         String.format("%02d:%02d:%02d", hours, minutes, secs));
-                if(running) {
+                if (running) {
                     seconds++;
                 }
                 handler.postDelayed(this, 1000);
@@ -134,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 distance = 0.0d;
-                if(distanceService != null) {
+                if (distanceService != null) {
                     distance = distanceService.getDistanceInMeters();
-                    if(running) {
+                    if (running) {
                         speed = distance / (seconds * 3600);
                     }
                     distanceView.setText(
