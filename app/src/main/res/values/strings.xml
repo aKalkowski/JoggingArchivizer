@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">JoggingArchivizer</string>
+
+    <!--values for main activity-->
+    <string name="gps_not_granted">Access to GPS not granted</string>
+    <string name="kilometers"> kilometers</string>
+    <string name="average_speed">Average speed: </string>
+    <string name="speed_unit"> km/h</string>
+    <string name="burned_calories">Burned calories: </string>
+    <string name="reset_button">Reset</string>
+    <string name="save_distance">Save to database</string>
+    <string name="start_button">Start!</string>
+    <string name="gps_not_enabled">GPS disabled!</string>
+
+    <!--values for database activity-->
+
+    <!--values for options-->
+</resources>
