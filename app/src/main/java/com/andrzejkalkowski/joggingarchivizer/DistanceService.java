@@ -19,6 +19,7 @@ public class DistanceService extends Service {
     private final IBinder binder = new DistanceBinder();
     private static Location lastLocation = null;
     private static double distance;
+    LocationManager locationManager;
 
     public DistanceService() {
     }
@@ -50,8 +51,9 @@ public class DistanceService extends Service {
 
             }
         };
-        LocationManager locationManager =
+        locationManager =
                 (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         if(ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,

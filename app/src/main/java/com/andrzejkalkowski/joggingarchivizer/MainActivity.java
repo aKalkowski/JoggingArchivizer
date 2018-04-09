@@ -1,11 +1,15 @@
 package com.andrzejkalkowski.joggingarchivizer;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +33,26 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             DistanceService.DistanceBinder binder = (DistanceService.DistanceBinder) service;
             distanceService = binder.getDistanceBinder();
+            if(!distanceService.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage(R.string.gps_not_enabled)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.enable, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton(R.string.dont_enable, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
             bound = true;
         }
 
@@ -61,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Intent intent = new Intent(this, DistanceService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
+
+
     }
 
     @Override
@@ -98,19 +124,21 @@ public class MainActivity extends AppCompatActivity {
     private void watchDistanceAndSpeed() {
         final Handler handler = new Handler();
         final String kilometers = getResources().getString(R.string.kilometers);
-        final String speedUnit = getResources().getString(R.string.average_speed);
+        final String speedUnit = getResources().getString(R.string.speed_unit);
         handler.post(new Runnable() {
             @Override
             public void run() {
                 distance = 0.0d;
-                speed = distance / (seconds * 3600);
                 if(distanceService != null) {
                     distance = distanceService.getDistanceInMeters();
+                    if(running) {
+                        speed = distance / (seconds * 3600);
+                    }
+                    distanceView.setText(
+                            String.format("%1$.2f", distance) + " " + kilometers);
+                    speedView.setText(
+                            String.format("%1$.2f", speed) + " " + speedUnit);
                 }
-                distanceView.setText(
-                        String.format("%1$.2f", distance) + " " + kilometers);
-                speedView.setText(
-                        String.format("%1$.2f", speed) + " " + speedUnit);
                 handler.postDelayed(this, 1000);
             }
         });
