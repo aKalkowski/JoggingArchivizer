@@ -1,4 +1,4 @@
-package com.andrzejkalkowski.joggingarchivizer;
+package com.andrzejkalkowski.joggingarchivizer.View;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,37 +13,60 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.andrzejkalkowski.joggingarchivizer.DistanceService;
+import com.andrzejkalkowski.joggingarchivizer.Presenter.Timer;
+import com.andrzejkalkowski.joggingarchivizer.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppCompatDelegate.NightMode nightMode;
 
-    private int seconds = 0;
+
     private double speed = 0.0d;
     private double distance = 0.0d;
+    private int seconds = 0;
     private int calories = 0;
+
     private boolean running;
     private boolean wasRunning;
     private boolean bound = false;
-    private DistanceService distanceService;
-    private SharedPreferences sharedPreferences;
+    private static Boolean gpsEnabled;
+
     public static final String PREFERENCES_NAME = "prefs";
     public static final String PREFERENCES_NIGHT_MODE = "nightMode";
+    public static final String PREFERNCES_ACTIVITY = "activity";
+
+    private static final String STATE_GPS_ENABLED = "gpsEnabled";
+    private String activity;
+
+    private Timer timer = new Timer(seconds, running);
+    private DistanceService distanceService;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor prefsEditor;
+    private DrawerLayout drawerLayout;
+
+
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             DistanceService.DistanceBinder binder = (DistanceService.DistanceBinder) service;
             distanceService = binder.getDistanceBinder();
-            if (!distanceService.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (!distanceService.getLocationManager().isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    && gpsEnabled == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage(R.string.gps_not_enabled)
                         .setCancelable(false)
@@ -51,12 +74,14 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                gpsEnabled = true;
                                 startActivity(intent);
                             }
                         })
                         .setNegativeButton(R.string.dont_enable, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                gpsEnabled = false;
                                 dialog.cancel();
                             }
                         });
@@ -81,12 +106,20 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.average_speed)
     public TextView speedView;
 
+    @BindView(R.id.button_toggle_start)
+    public Button buttonToggleStart;
+
+    @BindView(R.id.activity_view)
+    public TextView activityView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        activity = sharedPreferences.getString(PREFERNCES_ACTIVITY,
+                getResources().getString(R.string.default_activity));
         runTimer();
         watchDistanceAndSpeed();
     }
@@ -107,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     @Override
@@ -126,9 +158,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void onClickStart() {
-        runTimer();
-        watchDistanceAndSpeed();
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @OnClick(R.id.button_toggle_start)
+    public void onClickToggleStart(View view) {
+        if (running) {
+            running = false;
+        } else {
+            running = true;
+        }
+        timer.setRunning(running);
+    }
+
+    @OnLongClick(R.id.button_toggle_start)
+    public boolean onLongClickButtonStart(View view) {
+        if (running) {
+            running = false;
+        }
+        seconds = 0;
+        distance = 0.0d;
+        calories = 0;
+        timer.setRunning(running);
+        timer.setSeconds(seconds);
+        return true;
     }
 
     private void runTimer() {
@@ -136,14 +192,8 @@ public class MainActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                int hours = seconds / 3600;
-                int minutes = (seconds % 3600) / 60;
-                int secs = seconds % 60;
-                timerView.setText(
-                        String.format("%02d:%02d:%02d", hours, minutes, secs));
-                if (running) {
-                    seconds++;
-                }
+                timer.runTimer();
+                timerView.setText(timer.getTime());
                 handler.postDelayed(this, 1000);
             }
         });
@@ -156,11 +206,9 @@ public class MainActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                distance = 0.0d;
                 if (distanceService != null) {
-                    distance = distanceService.getDistanceInMeters();
                     if (running) {
-                        speed = distance / (seconds * 3600);
+                        distance = distanceService.getDistanceInMeters();
                     }
                     distanceView.setText(
                             String.format("%1$.2f", distance) + " " + kilometers);
@@ -170,16 +218,6 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed(this, 1000);
             }
         });
-    }
-
-    public void onClickStart(View view) {
-        running = true;
-    }
-
-    public void onClickReset(View view) {
-        running = false;
-        seconds = 0;
-        distance = 0;
-        calories = 0;
+        //TODO: implement speedmeter
     }
 }

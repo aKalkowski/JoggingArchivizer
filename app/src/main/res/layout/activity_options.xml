@@ -4,18 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.andrzejkalkowski.joggingarchivizer.OptionsActivity">
+    tools:context="com.andrzejkalkowski.joggingarchivizer.View.OptionsActivity">
+
+    <Switch
+        android:id="@+id/notifications_switch"
+        android:layout_width="0dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/notifications"
+        android:textAlignment="textStart"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/night_mode_switch"
+        app:layout_constraintStart_toStartOf="@+id/night_mode_switch"
+        app:layout_constraintTop_toBottomOf="@+id/night_mode_switch" />
+
+    <Spinner
+        android:id="@+id/gender_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/gender_label"
+        app:layout_constraintEnd_toEndOf="@+id/edit_weight"
+        app:layout_constraintStart_toStartOf="@+id/edit_weight"
+        app:layout_constraintTop_toTopOf="@+id/gender_label" />
+
+    <TextView
+        android:id="@+id/gender_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:labelFor="@id/activity_options_spinner"
+        android:text="@string/gender_label"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/weightView"
+        app:layout_constraintTop_toBottomOf="@+id/weightView" />
 
     <TextView
         android:id="@+id/activity_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:labelFor="@id/activity_options_spinner"
         android:text="@string/activity_label"
         android:textSize="18sp"
-        android:labelFor="@id/activity_options_spinner"
-        app:layout_constraintStart_toStartOf="@+id/weightView"
-        app:layout_constraintTop_toBottomOf="@+id/weightView" />
+        app:layout_constraintStart_toStartOf="@+id/gender_label"
+        app:layout_constraintTop_toBottomOf="@+id/gender_label" />
 
     <Switch
         android:id="@+id/night_mode_switch"
@@ -33,13 +67,13 @@
 
     <EditText
         android:id="@+id/edit_weight"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:ems="10"
         android:inputType="numberDecimal"
         app:layout_constraintBaseline_toBaselineOf="@+id/weightView"
-        app:layout_constraintEnd_toEndOf="@+id/night_mode_switch"
+        app:layout_constraintEnd_toEndOf="@+id/notifications_switch"
         app:layout_constraintStart_toEndOf="@+id/weightView" />
 
     <TextView
@@ -47,21 +81,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:labelFor="@id/edit_weight"
         android:text="@string/wight_label"
         android:textSize="18sp"
-        android:labelFor="@id/edit_weight"
-        app:layout_constraintStart_toStartOf="@+id/night_mode_switch"
-        app:layout_constraintTop_toBottomOf="@+id/night_mode_switch" />
+        app:layout_constraintStart_toStartOf="@+id/notifications_switch"
+        app:layout_constraintTop_toBottomOf="@+id/notifications_switch" />
 
     <Spinner
         android:id="@+id/activity_options_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/activity_label"
         app:layout_constraintEnd_toEndOf="@+id/edit_weight"
-        app:layout_constraintStart_toEndOf="@+id/activity_label"
+        app:layout_constraintStart_toStartOf="@+id/gender_spinner"
         app:layout_constraintTop_toTopOf="@+id/activity_label" />
 
     <Button

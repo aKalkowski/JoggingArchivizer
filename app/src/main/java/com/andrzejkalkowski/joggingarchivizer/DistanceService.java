@@ -18,7 +18,7 @@ public class DistanceService extends Service {
     private final IBinder binder = new DistanceBinder();
     private static Location lastLocation = null;
     private static double distance;
-    LocationManager locationManager;
+    private LocationManager locationManager;
 
     public DistanceService() {
     }
@@ -73,5 +73,21 @@ public class DistanceService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
+    }
+
+    public IBinder getBinder() {
+        return binder;
+    }
+
+    public static Location getLastLocation() {
+        return lastLocation;
+    }
+
+    public static double getDistance() {
+        return distance;
+    }
+
+    public LocationManager getLocationManager() {
+        return locationManager;
     }
 }
