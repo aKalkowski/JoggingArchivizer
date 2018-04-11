@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.andrzejkalkowski.joggingarchivizer.View.ReminderActivity">
+
+    <Switch
+        android:id="@+id/switch_monday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/monday"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/switch_tuesday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/tuesday"
+        app:layout_constraintEnd_toEndOf="@+id/switch_monday"
+        app:layout_constraintStart_toStartOf="@+id/switch_monday"
+        app:layout_constraintTop_toBottomOf="@+id/switch_monday" />
+
+    <Switch
+        android:id="@+id/switch_wednesday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/wednesday"
+        app:layout_constraintEnd_toEndOf="@+id/switch_tuesday"
+        app:layout_constraintStart_toStartOf="@+id/switch_tuesday"
+        app:layout_constraintTop_toBottomOf="@+id/switch_tuesday" />
+
+    <Switch
+        android:id="@+id/switch_thursday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/thursday"
+        app:layout_constraintEnd_toEndOf="@+id/switch_wednesday"
+        app:layout_constraintStart_toStartOf="@+id/switch_wednesday"
+        app:layout_constraintTop_toBottomOf="@+id/switch_wednesday" />
+
+    <Switch
+        android:id="@+id/switch_friday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/friday"
+        app:layout_constraintEnd_toEndOf="@+id/switch_thursday"
+        app:layout_constraintStart_toStartOf="@+id/switch_thursday"
+        app:layout_constraintTop_toBottomOf="@+id/switch_thursday" />
+
+    <Switch
+        android:id="@+id/switch_saturday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/saturday"
+        app:layout_constraintEnd_toEndOf="@+id/switch_friday"
+        app:layout_constraintStart_toStartOf="@+id/switch_friday"
+        app:layout_constraintTop_toBottomOf="@+id/switch_friday" />
+
+    <Switch
+        android:id="@+id/switch_sunday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/sunday"
+        app:layout_constraintEnd_toEndOf="@+id/switch_saturday"
+        app:layout_constraintStart_toStartOf="@+id/switch_saturday"
+        app:layout_constraintTop_toBottomOf="@+id/switch_saturday" />
+
+</android.support.constraint.ConstraintLayout>

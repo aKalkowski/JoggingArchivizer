@@ -25,7 +25,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".View.MainActivity" />
         </activity>
-        <activity android:name=".View.DatabaseActivity"></activity>
+        <activity android:name=".View.DatabaseActivity"
+            android:parentActivityName=".View.MainActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".View.MainActivity" />
+        </activity>
+        <activity android:name=".View.ReminderActivity"
+            android:parentActivityName=".View.MainActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".View.MainActivity" />
+        </activity>
 
         <service
             android:name=".DistanceService"

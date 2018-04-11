@@ -7,12 +7,12 @@ import com.andrzejkalkowski.joggingarchivizer.R;
 
 import butterknife.ButterKnife;
 
-public class DatabaseActivity extends AppCompatActivity {
+public class ReminderActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_database);
+        setContentView(R.layout.activity_reminder);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
     }

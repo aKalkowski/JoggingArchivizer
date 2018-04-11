@@ -46,9 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean bound = false;
     private static Boolean gpsEnabled;
 
-    public static final String PREFERENCES_NAME = "prefs";
-    public static final String PREFERENCES_NIGHT_MODE = "nightMode";
-    public static final String PREFERNCES_ACTIVITY = "activity";
+    private final String PREFERENCES_NAME = "prefs";
+    private final String PREFERENCES_NIGHT_MODE = "nightMode";
+    private final String PREFERENCES_ACTIVITY = "activity";
+    private final String PREFERENCES_GENDER = "gender";
 
     private static final String STATE_GPS_ENABLED = "gpsEnabled";
     private String activity;
@@ -118,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        activity = sharedPreferences.getString(PREFERNCES_ACTIVITY,
-                getResources().getString(R.string.default_activity));
+
         runTimer();
         watchDistanceAndSpeed();
     }
@@ -137,6 +137,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, OptionsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_reminder:
+                Intent intent1 = new Intent(this, ReminderActivity.class);
+                startActivity(intent1);
+                return true;
+            case R.id.action_database:
+                Intent intent2 = new Intent(this, DatabaseActivity.class);
+                startActivity(intent2);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -147,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Intent intent = new Intent(this, DistanceService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        activity = sharedPreferences.getString(PREFERENCES_ACTIVITY,
+                getResources().getString(R.string.default_activity));
+        activityView.setText(activity);
     }
 
     @Override
@@ -168,8 +179,10 @@ public class MainActivity extends AppCompatActivity {
     public void onClickToggleStart(View view) {
         if (running) {
             running = false;
+            buttonToggleStart.setText(R.string.start_button);
         } else {
             running = true;
+            buttonToggleStart.setText(R.string.start_button_toggled);
         }
         timer.setRunning(running);
     }
@@ -178,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onLongClickButtonStart(View view) {
         if (running) {
             running = false;
+            buttonToggleStart.setText(R.string.start_button);
         }
         seconds = 0;
         distance = 0.0d;
@@ -209,6 +223,8 @@ public class MainActivity extends AppCompatActivity {
                 if (distanceService != null) {
                     if (running) {
                         distance = distanceService.getDistanceInMeters();
+                        int secs = timer.getSeconds();
+                        speed = (distance * 1000) / (secs * 3600);
                     }
                     distanceView.setText(
                             String.format("%1$.2f", distance) + " " + kilometers);
@@ -218,6 +234,11 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed(this, 1000);
             }
         });
-        //TODO: implement speedmeter
     }
+
+    private void restoreData() {
+
+    }
+
+    //TODO: implement callories calculator
 }

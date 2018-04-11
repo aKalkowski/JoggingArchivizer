@@ -37,8 +37,8 @@
         android:labelFor="@id/activity_options_spinner"
         android:text="@string/gender_label"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/weightView"
-        app:layout_constraintTop_toBottomOf="@+id/weightView" />
+        app:layout_constraintStart_toStartOf="@+id/heightView"
+        app:layout_constraintTop_toBottomOf="@+id/heightView" />
 
     <TextView
         android:id="@+id/activity_label"
@@ -76,6 +76,16 @@
         app:layout_constraintEnd_toEndOf="@+id/notifications_switch"
         app:layout_constraintStart_toEndOf="@+id/weightView" />
 
+    <EditText
+        android:id="@+id/edit_height"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBaseline_toBaselineOf="@+id/heightView"
+        app:layout_constraintEnd_toEndOf="@+id/edit_weight"
+        app:layout_constraintStart_toStartOf="@+id/edit_weight" />
+
     <TextView
         android:id="@+id/weightView"
         android:layout_width="wrap_content"
@@ -86,6 +96,17 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/notifications_switch"
         app:layout_constraintTop_toBottomOf="@+id/notifications_switch" />
+
+    <TextView
+        android:id="@+id/heightView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:labelFor="@id/edit_height"
+        android:text="@string/height_name"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/weightView"
+        app:layout_constraintTop_toBottomOf="@+id/weightView" />
 
     <Spinner
         android:id="@+id/activity_options_spinner"

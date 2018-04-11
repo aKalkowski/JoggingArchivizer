@@ -26,12 +26,19 @@ public class OptionsActivity extends AppCompatActivity {
     private final String PREFERENCES_NIGHT_MODE = "nightMode";
     private final String PREFERENCES_WEIGHT = "weight";
     private final String PREFERENCES_ACTIVITY = "activity";
+    private final String PREFERENCES_GENDER = "gender";
+    private final String PREFERENCES_ACTIVITY_INDEX = "activityIndex";
+    private final String PREFERENCES_GENDER_INDEX = "genderIndex";
+
     private double weight;
     private boolean nightModeEnabled;
     private ArrayAdapter<String> arrayAdapter;
     private String[] activityValues;
     private String[] genderValues;
     private String currentActivity;
+    private String gender;
+    private int spinnerActivityIndex;
+    private int spinnerGenderIndex;
 
     private SharedPreferences sharedPreferences;
 
@@ -51,7 +58,6 @@ public class OptionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
-        // ActionBar actionBar = getActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
         activityValues = getResources().getStringArray(R.array.activity_options);
@@ -61,7 +67,7 @@ public class OptionsActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, genderValues);
         genderOptions.setAdapter(arrayAdapter);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-        restoreData();
+
         nightModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -84,10 +90,19 @@ public class OptionsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        restoreData();
+        genderOptions.setSelection(spinnerGenderIndex);
+        activityOptions.setSelection(spinnerActivityIndex);
+
     }
 
     @OnItemSelected(R.id.activity_options_spinner)
-    public void spinnerItemSelected(Spinner spinner, int position) {
+    public void activitySpinnerItemSelected(Spinner spinner, int position) {
+
+    }
+
+    @OnItemSelected(R.id.gender_spinner)
+    public void genderSpinnerItemSelected(Spinner spinner, int position) {
 
     }
 
@@ -101,6 +116,9 @@ public class OptionsActivity extends AppCompatActivity {
         editor.putLong(PREFERENCES_WEIGHT, Double.doubleToLongBits(
                 Double.valueOf(weightEdit.getText().toString())));
         editor.putString(PREFERENCES_ACTIVITY, activityOptions.getSelectedItem().toString());
+        editor.putString(PREFERENCES_GENDER, genderOptions.getSelectedItem().toString());
+        editor.putInt(PREFERENCES_ACTIVITY_INDEX, activityOptions.getSelectedItemPosition());
+        editor.putInt(PREFERENCES_GENDER_INDEX, genderOptions.getSelectedItemPosition());
         if(editor.commit()) {
             Log.d(TAG, "saveData: Data saved");
             Toast.makeText(this, R.string.settings_save_success, Toast.LENGTH_SHORT).show();
@@ -111,6 +129,8 @@ public class OptionsActivity extends AppCompatActivity {
         nightModeEnabled = sharedPreferences.getBoolean(PREFERENCES_NIGHT_MODE, false);
         weight = Double.longBitsToDouble(sharedPreferences.getLong(PREFERENCES_WEIGHT, 0));
         weightEdit.setText(String.valueOf(weight));
+        spinnerActivityIndex = sharedPreferences.getInt(PREFERENCES_ACTIVITY_INDEX, 0);
+        spinnerGenderIndex = sharedPreferences.getInt(PREFERENCES_GENDER_INDEX, 0);
         Log.d(TAG, "restoreData: Data restored");
     }
 }
