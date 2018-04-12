@@ -87,6 +87,10 @@ public class DistanceService extends Service {
         return distance;
     }
 
+    public static void setDistance(double distance) {
+        DistanceService.distance = distance;
+    }
+
     public LocationManager getLocationManager() {
         return locationManager;
     }

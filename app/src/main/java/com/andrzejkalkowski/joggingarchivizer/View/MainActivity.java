@@ -16,6 +16,7 @@ import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
     private AppCompatDelegate.NightMode nightMode;
 
-
+    private static final String TAG = "MainActivity";
     private double speed = 0.0d;
     private double distance = 0.0d;
-    private int seconds = 0;
+    private double averageSpeed = 0.0d;
     private int calories = 0;
 
-    private boolean running;
+    private boolean running = false;
     private boolean wasRunning;
     private boolean bound = false;
     private static Boolean gpsEnabled;
@@ -54,12 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String STATE_GPS_ENABLED = "gpsEnabled";
     private String activity;
 
-    private Timer timer = new Timer(seconds, running);
+    private Timer timer = new Timer();
     private DistanceService distanceService;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor prefsEditor;
     private DrawerLayout drawerLayout;
-
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -119,9 +119,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-
-        runTimer();
-        watchDistanceAndSpeed();
+        runClocks();
     }
 
     @Override
@@ -179,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClickToggleStart(View view) {
         if (running) {
             running = false;
+            averageSpeed = speed;
             buttonToggleStart.setText(R.string.start_button);
         } else {
             running = true;
@@ -193,45 +192,37 @@ public class MainActivity extends AppCompatActivity {
             running = false;
             buttonToggleStart.setText(R.string.start_button);
         }
-        seconds = 0;
         distance = 0.0d;
         calories = 0;
         timer.setRunning(running);
-        timer.setSeconds(seconds);
+        timer.setSeconds(0);
+        distanceService.setDistance(distance);
         return true;
     }
 
-    private void runTimer() {
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                timer.runTimer();
-                timerView.setText(timer.getTime());
-                handler.postDelayed(this, 1000);
-            }
-        });
-    }
-
-    private void watchDistanceAndSpeed() {
+    private void runClocks() {
         final Handler handler = new Handler();
         final String kilometers = getResources().getString(R.string.kilometers);
         final String speedUnit = getResources().getString(R.string.speed_unit);
         handler.post(new Runnable() {
             @Override
             public void run() {
+                timer.runTimer();
+                timerView.setText(timer.getTime());
+                Log.d(TAG, "run: timer: " + timer.getSeconds());
+                handler.postDelayed(this, 1000);
                 if (distanceService != null) {
                     if (running) {
                         distance = distanceService.getDistanceInMeters();
-                        int secs = timer.getSeconds();
-                        speed = (distance * 1000) / (secs * 3600);
+                        speed = distance  / timer.getSeconds() * 3600;
+                        Log.d(TAG, "run: distance: " + distance);
+                        Log.d(TAG, "run: speed: " + speed);
                     }
                     distanceView.setText(
                             String.format("%1$.2f", distance) + " " + kilometers);
                     speedView.setText(
                             String.format("%1$.2f", speed) + " " + speedUnit);
                 }
-                handler.postDelayed(this, 1000);
             }
         });
     }
@@ -240,5 +231,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //TODO: implement callories calculator
+    //TODO: implement calories calculator
 }

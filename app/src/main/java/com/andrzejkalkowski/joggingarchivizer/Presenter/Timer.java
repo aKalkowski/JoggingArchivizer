@@ -1,17 +1,19 @@
 package com.andrzejkalkowski.joggingarchivizer.Presenter;
 
+import android.util.Log;
+
 /**
  * Created by komputerek on 11.04.18.
  */
 
 public class Timer {
-    private int seconds = 0;
-    boolean running = false;
+    public static int seconds = 0;
+    private boolean running;
     private String time = "00:00:00";
+    private static final String TAG = "Timer";
 
-    public Timer(int seconds, boolean running) {
-        this.seconds = seconds;
-        this.running = running;
+    public Timer() {
+        this.running = false;
     }
 
     public void runTimer() {
@@ -22,7 +24,9 @@ public class Timer {
         if (running) {
             seconds++;
         }
+        Log.d(TAG, "runTimer: " + seconds);
     }
+
 
     public boolean isRunning() {
         return running;
