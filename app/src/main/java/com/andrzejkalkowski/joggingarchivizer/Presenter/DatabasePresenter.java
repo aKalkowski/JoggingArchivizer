@@ -1,8 +1,5 @@
 package com.andrzejkalkowski.joggingarchivizer.Presenter;
 
-import com.andrzejkalkowski.joggingarchivizer.Model.DatabaseHelper;
-import com.andrzejkalkowski.joggingarchivizer.View.DatabaseActivity;
-
 /**
  * Created by komputerek on 12.04.18.
  */

@@ -34,8 +34,6 @@ import butterknife.OnLongClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppCompatDelegate.NightMode nightMode;
-
     private static final String TAG = "MainActivity";
     private double speed = 0.0d;
     private double distance = 0.0d;

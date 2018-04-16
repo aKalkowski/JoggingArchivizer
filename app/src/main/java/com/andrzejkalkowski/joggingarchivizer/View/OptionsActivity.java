@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -72,24 +71,6 @@ public class OptionsActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, genderValues);
         genderOptions.setAdapter(arrayAdapter);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-
-        nightModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    setDefaultNightMode();
-                    Toast.makeText(OptionsActivity.this,
-                            R.string.night_mode_toast, Toast.LENGTH_SHORT).show();
-                    nightModeEnabled = true;
-                } else if (!isChecked) {
-                    setDefaultNightMode();
-                    Toast.makeText(OptionsActivity.this,
-                            R.string.night_mode_toast_disabled, Toast.LENGTH_SHORT).show();
-                    nightModeEnabled = false;
-                }
-                saveData();
-            }
-        });
     }
 
     @Override
@@ -136,6 +117,22 @@ public class OptionsActivity extends AppCompatActivity {
 
     }
 
+    @OnCheckedChanged(R.id.night_mode_switch)
+    public void onSwitchChecked(Switch nightModeSwitch, boolean isChecked) {
+        if (isChecked) {
+            setDefaultNightMode();
+            nightModeEnabled = true;
+            Toast.makeText(OptionsActivity.this,
+                    R.string.night_mode_toast, Toast.LENGTH_SHORT).show();
+        } else {
+            setDefaultDayMode();
+            nightModeEnabled = false;
+            Toast.makeText(OptionsActivity.this,
+                    R.string.night_mode_toast_disabled, Toast.LENGTH_SHORT).show();
+        }
+        saveData();
+    }
+
     public void setDefaultNightMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }
@@ -156,7 +153,7 @@ public class OptionsActivity extends AppCompatActivity {
 
     private void saveData() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(PREFERENCES_NIGHT_MODE, nightModeEnabled).apply();
+        editor.putBoolean(PREFERENCES_NIGHT_MODE, nightModeEnabled);
         editor.putLong(PREFERENCES_WEIGHT, Double.doubleToLongBits(
                 Double.valueOf(weightEdit.getText().toString())));
         editor.putString(PREFERENCES_ACTIVITY, activityOptions.getSelectedItem().toString());
@@ -175,6 +172,9 @@ public class OptionsActivity extends AppCompatActivity {
         weightEdit.setText(String.valueOf(weight));
         spinnerActivityIndex = sharedPreferences.getInt(PREFERENCES_ACTIVITY_INDEX, 0);
         spinnerGenderIndex = sharedPreferences.getInt(PREFERENCES_GENDER_INDEX, 0);
+        if (nightModeEnabled) {
+            nightModeSwitch.setChecked(true);
+        }
         Log.d(TAG, "restoreData: Data restored");
     }
 }
