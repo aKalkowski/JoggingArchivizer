@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import com.andrzejkalkowski.joggingarchivizer.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnItemSelected;
 
 public class OptionsActivity extends AppCompatActivity {
@@ -75,10 +77,12 @@ public class OptionsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    setDefaultNightMode();
                     Toast.makeText(OptionsActivity.this,
                             R.string.night_mode_toast, Toast.LENGTH_SHORT).show();
                     nightModeEnabled = true;
                 } else if (!isChecked) {
+                    setDefaultNightMode();
                     Toast.makeText(OptionsActivity.this,
                             R.string.night_mode_toast_disabled, Toast.LENGTH_SHORT).show();
                     nightModeEnabled = false;
@@ -131,6 +135,15 @@ public class OptionsActivity extends AppCompatActivity {
     public void activitySpinnerItemSelected(Spinner spinner, int position) {
 
     }
+
+    public void setDefaultNightMode() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+    }
+
+    public void setDefaultDayMode(){
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+    }
+
 
     @OnItemSelected(R.id.gender_spinner)
     public void genderSpinnerItemSelected(Spinner spinner, int position) {
