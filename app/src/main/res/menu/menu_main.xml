@@ -3,18 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.andrzejkalkowski.italiasnackbar.MainActivity">
 
+    <item android:id="@+id/action_main"
+        android:title="@string/main"
+        android:orderInCategory="1"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/action_settings"
         android:title="@string/settings"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         app:showAsAction="never"/>
 
     <item android:id="@+id/action_reminder"
         android:title="@string/reminder"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         app:showAsAction="never"/>
 
     <item android:id="@+id/action_database"
         android:title="@string/database"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         app:showAsAction="never"/>
 </menu>

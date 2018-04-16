@@ -1,9 +1,12 @@
 package com.andrzejkalkowski.joggingarchivizer.View;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -83,6 +86,34 @@ public class OptionsActivity extends AppCompatActivity {
                 saveData();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean created = super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.getItem(1).setChecked(true);
+        return created;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_main:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_reminder:
+                Intent intent1 = new Intent(this, ReminderActivity.class);
+                startActivity(intent1);
+                return true;
+            case R.id.action_database:
+                Intent intent2 = new Intent(this, DatabaseActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     //TODO: implement reminding notifications for every day of week

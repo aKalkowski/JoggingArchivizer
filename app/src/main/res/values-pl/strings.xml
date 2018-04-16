@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">Treningowy Ziomeczek</string>
+
+    <!-- values for dropdown menu -->
+    <string name="main">Stoper</string>
+    <string name="settings">Ustawienia</string>
+    <string name="reminder">Przypomnienia</string>
+    <string name="database">Baza danych</string>
+
+    <!--values for main activity-->
+    <string name="gps_not_granted">GPS niedostępny</string>
+    <string name="kilometers"> km</string>
+    <string name="speed_unit"> km/h</string>
+    <string name="burned_calories">Spalone kalorie</string>
+    <string name="default_activity">Bieganie</string>
+
+    <string name="start_button">Start!</string>
+    <string name="start_button_toggled">Stop / Reset</string>
+    <string name="gps_not_enabled">GPS wyłączony!\nChcesz go włączyć?</string>
+    <string name="enable">Tak</string>
+    <string name="dont_enable">Nie</string>
+
+    <!--values for database activity-->
+    <string name="save_distance">Zapisz do bazy danych</string>
+
+    <!--values for options-->
+    <string name="night_mode">Tryb nocny</string>
+    <string name="notifications">Włącz przypomnienia</string>
+    <string name="wight_label">Waga:</string>
+    <string name="height_name">Wzrost:</string>
+    <string name="activity_label">Atywność: </string>
+    <string name="save_data_button">Zapisz ustawienia</string>
+    <string-array name="activity_options">
+        <item>Marsz</item>
+        <item>Bieganie</item>
+        <item>Sprint</item>
+        <item>Jazda na rowerze</item>
+    </string-array>
+    <string name="gender_label">Płeć:</string>
+    <string-array name="gender_options">
+        <item>Mężczyzna</item>
+        <item>Kobieta</item>
+    </string-array>
+    <string name="night_mode_toast">Tryb nocny włączony</string>
+    <string name="night_mode_toast_disabled">Tryb nocny wyłączony</string>
+    <string name="settings_save_success">Zapisano ustawienia</string>
+
+    <!-- values for reminder -->
+    <string name="monday">Poniedziałek</string>
+    <string name="tuesday">Wtorek</string>
+    <string name="wednesday">Środa</string>
+    <string name="thursday">Czwartek</string>
+    <string name="friday">Piątek</string>
+    <string name="saturday">Sobota</string>
+    <string name="sunday">Niedziela</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
