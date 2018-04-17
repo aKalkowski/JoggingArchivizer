@@ -1,48 +1,26 @@
-package com.andrzejkalkowski.joggingarchivizer.View;
+package com.andrzejkalkowski.joggingarchivizer.Controller;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Switch;
-import android.widget.TimePicker;
+import android.widget.ListView;
 
 import com.andrzejkalkowski.joggingarchivizer.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReminderActivity extends AppCompatActivity {
+public class DatabaseActivity extends AppCompatActivity {
 
-    @BindView(R.id.switch_monday)
-    public Switch switchMonday;
-
-    @BindView(R.id.switch_tuesday)
-    public Switch switchTuesday;
-
-    @BindView(R.id.switch_wednesday)
-    public Switch switchWednesday;
-
-    @BindView(R.id.switch_thursday)
-    public Switch switchThursday;
-
-    @BindView(R.id.switch_friday)
-    public Switch switchFriday;
-
-    @BindView(R.id.switch_saturday)
-    public Switch switchSaturday;
-
-    @BindView(R.id.switch_sunday)
-    public Switch switchSunday;
-
-    @BindView(R.id.time_picker)
-    public TimePicker timePicker;
+    @BindView(R.id.activity_list)
+    public ListView activityList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reminder);
+        setContentView(R.layout.activity_database);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
     }
@@ -60,12 +38,12 @@ public class ReminderActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, OptionsActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.action_main:
-                Intent intent1 = new Intent(this, MainActivity.class);
+            case R.id.action_reminder:
+                Intent intent1 = new Intent(this, ReminderActivity.class);
                 startActivity(intent1);
                 return true;
-            case R.id.action_database:
-                Intent intent2 = new Intent(this, DatabaseActivity.class);
+            case R.id.action_main:
+                Intent intent2 = new Intent(this, MainActivity.class);
                 startActivity(intent2);
                 return true;
             default:

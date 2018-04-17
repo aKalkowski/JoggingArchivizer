@@ -1,4 +1,4 @@
-package com.andrzejkalkowski.joggingarchivizer.View;
+package com.andrzejkalkowski.joggingarchivizer.Controller;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +17,8 @@ import android.widget.Toast;
 
 import com.andrzejkalkowski.joggingarchivizer.R;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnItemSelected;
 
@@ -120,25 +120,17 @@ public class OptionsActivity extends AppCompatActivity {
     @OnCheckedChanged(R.id.night_mode_switch)
     public void onSwitchChecked(Switch nightModeSwitch, boolean isChecked) {
         if (isChecked) {
-            setDefaultNightMode();
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             nightModeEnabled = true;
             Toast.makeText(OptionsActivity.this,
                     R.string.night_mode_toast, Toast.LENGTH_SHORT).show();
         } else {
-            setDefaultDayMode();
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             nightModeEnabled = false;
             Toast.makeText(OptionsActivity.this,
                     R.string.night_mode_toast_disabled, Toast.LENGTH_SHORT).show();
         }
         saveData();
-    }
-
-    public void setDefaultNightMode() {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-    }
-
-    public void setDefaultDayMode(){
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
 
@@ -174,6 +166,7 @@ public class OptionsActivity extends AppCompatActivity {
         spinnerGenderIndex = sharedPreferences.getInt(PREFERENCES_GENDER_INDEX, 0);
         if (nightModeEnabled) {
             nightModeSwitch.setChecked(true);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         Log.d(TAG, "restoreData: Data restored");
     }

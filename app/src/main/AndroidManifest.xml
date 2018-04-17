@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.MainActivity">
+        <activity android:name=".Controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,27 +19,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.OptionsActivity"
-            android:parentActivityName=".View.MainActivity">
+            android:name=".Controller.OptionsActivity"
+            android:parentActivityName=".Controller.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".View.MainActivity" />
+                android:value=".Controller.MainActivity" />
         </activity>
-        <activity android:name=".View.DatabaseActivity"
-            android:parentActivityName=".View.MainActivity">
+        <activity android:name=".Controller.DatabaseActivity"
+            android:parentActivityName=".Controller.MainActivity">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".View.MainActivity" />
+            android:value=".Controller.MainActivity" />
         </activity>
-        <activity android:name=".View.ReminderActivity"
-            android:parentActivityName=".View.MainActivity">
+        <activity android:name=".Controller.ReminderActivity"
+            android:parentActivityName=".Controller.MainActivity">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".View.MainActivity" />
+            android:value=".Controller.MainActivity" />
         </activity>
 
         <service
-            android:name=".DistanceService"
+            android:name=".Model.Services.DistanceService"
             android:enabled="true"
             android:exported="true" />
     </application>

@@ -1,8 +1,6 @@
-package com.andrzejkalkowski.joggingarchivizer.Presenter;
+package com.andrzejkalkowski.joggingarchivizer.Model;
 
 import android.util.Log;
-
-import com.andrzejkalkowski.joggingarchivizer.Model.DatabaseHelper;
 
 /**
  * Created by komputerek on 11.04.18.

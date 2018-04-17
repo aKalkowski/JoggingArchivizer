@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.andrzejkalkowski.joggingarchivizer.View.ReminderActivity">
+        tools:context="com.andrzejkalkowski.joggingarchivizer.Controller.ReminderActivity">
 
         <Switch
             android:id="@+id/switch_monday"
@@ -86,9 +86,13 @@
 
         <TimePicker
             android:id="@+id/time_picker"
+            style="@android:style/Widget.Material.TimePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:timePickerMode="spinner"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/switch_sunday" />

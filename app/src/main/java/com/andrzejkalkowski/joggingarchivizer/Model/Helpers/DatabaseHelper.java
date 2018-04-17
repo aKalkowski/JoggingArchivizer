@@ -1,12 +1,11 @@
-package com.andrzejkalkowski.joggingarchivizer.Model;
+package com.andrzejkalkowski.joggingarchivizer.Model.Helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.andrzejkalkowski.joggingarchivizer.Presenter.DatabasePresenter;
-import com.andrzejkalkowski.joggingarchivizer.Presenter.Timer;
+import com.andrzejkalkowski.joggingarchivizer.Model.Timer;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -17,15 +16,14 @@ import java.util.Calendar;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
-    public static final String DATRABASE_NAME = "activities";
+    public static final String DATABASE_NAME = "activities";
     public static final int DATABASE_VERSION = 1;
 
     private Calendar calendar = Calendar.getInstance();
 
-    private DatabasePresenter presenter;
 
     public DatabaseHelper(Context context) {
-        super(context, DATRABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -47,7 +45,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             + "distance DECIMAL, "
             + "time TEXT);");
         }
-        presenter = new DatabasePresenter();
 
     }
 

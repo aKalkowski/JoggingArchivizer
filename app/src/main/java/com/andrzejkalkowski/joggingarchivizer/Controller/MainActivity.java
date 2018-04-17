@@ -1,4 +1,4 @@
-package com.andrzejkalkowski.joggingarchivizer.View;
+package com.andrzejkalkowski.joggingarchivizer.Controller;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,14 +23,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.andrzejkalkowski.joggingarchivizer.DistanceService;
-import com.andrzejkalkowski.joggingarchivizer.Presenter.Timer;
+import com.andrzejkalkowski.joggingarchivizer.Model.Services.DistanceService;
+import com.andrzejkalkowski.joggingarchivizer.Model.Timer;
 import com.andrzejkalkowski.joggingarchivizer.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+
+import static com.andrzejkalkowski.joggingarchivizer.Model.NightMode.setDefaultNightMode;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean running = false;
     private boolean wasRunning;
     private boolean bound = false;
+    private boolean nightMode;
     private static Boolean gpsEnabled;
 
     private final String PREFERENCES_NAME = "prefs";
@@ -117,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        restoreData();
+        if (nightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
         runClocks();
     }
 
@@ -151,9 +158,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Intent intent = new Intent(this, DistanceService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
+
         activity = sharedPreferences.getString(PREFERENCES_ACTIVITY,
                 getResources().getString(R.string.default_activity));
         activityView.setText(activity);
+
     }
 
     @Override
@@ -226,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void restoreData() {
-
+        nightMode = sharedPreferences.getBoolean(PREFERENCES_NIGHT_MODE, false);
     }
 
     //TODO: implement calories calculator

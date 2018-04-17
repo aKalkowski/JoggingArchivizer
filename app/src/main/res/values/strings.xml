@@ -19,7 +19,6 @@
     <string name="gps_not_enabled">GPS disabled!\nWant to turn it on?</string>
     <string name="enable">Yes</string>
     <string name="dont_enable">No</string>
-
     <!--values for database activity-->
     <string name="save_distance">Save to database</string>
 

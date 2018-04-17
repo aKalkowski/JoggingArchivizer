@@ -1,4 +1,4 @@
-package com.andrzejkalkowski.joggingarchivizer;
+package com.andrzejkalkowski.joggingarchivizer.Model.Services;
 
 import android.Manifest;
 import android.app.Service;
