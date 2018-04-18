@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,9 +23,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.andrzejkalkowski.joggingarchivizer.Model.Helpers.DatabaseHelper;
 import com.andrzejkalkowski.joggingarchivizer.Model.Services.DistanceService;
 import com.andrzejkalkowski.joggingarchivizer.Model.Timer;
+import com.andrzejkalkowski.joggingarchivizer.Model.Training;
 import com.andrzejkalkowski.joggingarchivizer.R;
 
 import butterknife.BindView;
@@ -32,15 +36,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 
-import static com.andrzejkalkowski.joggingarchivizer.Model.NightMode.setDefaultNightMode;
-
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+
     private double speed = 0.0d;
     private double distance = 0.0d;
     private double averageSpeed = 0.0d;
-    private int calories = 0;
+    private int calories = 100;
 
     private boolean running = false;
     private boolean wasRunning;
@@ -57,9 +60,12 @@ public class MainActivity extends AppCompatActivity {
     private String activity;
 
     private Timer timer = new Timer();
+    private Training training;
+
     private DistanceService distanceService;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor prefsEditor;
+    private DatabaseHelper helper;
+    private SQLiteDatabase database;
     private DrawerLayout drawerLayout;
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -120,11 +126,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        helper = DatabaseHelper.getInstance(this);
+        database = helper.getWritableDatabase();
         restoreData();
         if (nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         runClocks();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
     }
 
     @Override
@@ -148,6 +161,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(this, DatabaseActivity.class);
                 startActivity(intent2);
                 return true;
+            case R.id.action_add_to_database:
+                training = new Training.TrainingBuilder(activityView.getText().toString())
+                        .burntCalories(calories)
+                        .distance(distance)
+                        .seconds(timer.getSeconds())
+                        .build();
+                helper.addActivity(helper.getWritableDatabase(), training);
+                helper.close();
+                Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -156,8 +179,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, DistanceService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
 
         activity = sharedPreferences.getString(PREFERENCES_ACTIVITY,
                 getResources().getString(R.string.default_activity));
@@ -166,18 +187,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this, DistanceService.class);
+        startService(intent);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (bound) {
             unbindService(connection);
             bound = false;
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
     }
 
     @OnClick(R.id.button_toggle_start)
@@ -201,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         }
         distance = 0.0d;
         calories = 0;
+        speed = 0.0d;
         timer.setRunning(running);
         timer.setSeconds(0);
         distanceService.setDistance(distance);
@@ -216,8 +240,6 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 timer.runTimer();
                 timerView.setText(timer.getTime());
-                Log.d(TAG, "run: timer: " + timer.getSeconds());
-                handler.postDelayed(this, 1000);
                 if (distanceService != null) {
                     if (running) {
                         distance = distanceService.getDistanceInMeters();
@@ -230,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
                     speedView.setText(
                             String.format("%1$.2f", speed) + " " + speedUnit);
                 }
+                handler.postDelayed(this, 1000);
             }
         });
     }

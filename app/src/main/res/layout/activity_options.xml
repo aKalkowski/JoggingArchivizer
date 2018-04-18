@@ -129,4 +129,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/activity_label" />
 
+    <Button
+        android:id="@+id/button_delete_table"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/delete_table"
+        app:layout_constraintStart_toStartOf="@+id/activity_label"
+        app:layout_constraintTop_toBottomOf="@+id/activity_label" />
+
 </android.support.constraint.ConstraintLayout>

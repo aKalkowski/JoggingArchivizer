@@ -6,6 +6,7 @@
     <string name="settings">Settings</string>
     <string name="reminder">Reminder</string>
     <string name="database">Database</string>
+    <string name="add_to_database">Add to database</string>
 
     <!--values for main activity-->
     <string name="gps_not_granted">Access to GPS not granted</string>
@@ -19,8 +20,17 @@
     <string name="gps_not_enabled">GPS disabled!\nWant to turn it on?</string>
     <string name="enable">Yes</string>
     <string name="dont_enable">No</string>
+
     <!--values for database activity-->
     <string name="save_distance">Save to database</string>
+    <string name="select_activity">Select activity:</string>
+    <string-array name="activity_options_database">
+        <item>All</item>
+        <item>Walking</item>
+        <item>Running</item>
+        <item>Sprint</item>
+        <item>Biking</item>
+    </string-array>
 
     <!--values for options-->
     <string name="night_mode">Night mode</string>
@@ -29,6 +39,12 @@
     <string name="height_name">Height:</string>
     <string name="activity_label">Activity: </string>
     <string name="save_data_button">Save options</string>
+    <string name="delete_table">Delete all records in database</string>
+    <string name="delete_warning">Warning!</string>
+    <string name="dialog_delete_table">Are You sure?\nAll Your data will be deleted!</string>
+    <string name="dialog_positive_response">Yes!</string>
+    <string name="dialog_negative_response">No</string>
+    <string name="dialog_data_not_deleted">All your data is safe... so far.</string>
     <string-array name="activity_options">
         <item>Walking</item>
         <item>Running</item>

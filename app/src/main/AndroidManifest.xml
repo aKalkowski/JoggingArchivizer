@@ -25,23 +25,28 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controller.MainActivity" />
         </activity>
-        <activity android:name=".Controller.DatabaseActivity"
+        <activity
+            android:name=".Controller.DatabaseActivity"
             android:parentActivityName=".Controller.MainActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".Controller.MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controller.MainActivity" />
         </activity>
-        <activity android:name=".Controller.ReminderActivity"
+
+        <activity
+            android:name=".Controller.ReminderActivity"
             android:parentActivityName=".Controller.MainActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".Controller.MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controller.MainActivity" />
         </activity>
 
         <service
             android:name=".Model.Services.DistanceService"
             android:enabled="true"
             android:exported="true" />
+
+        <activity android:name=".Controller.TrainingActivity"></activity>
     </application>
 
 </manifest>

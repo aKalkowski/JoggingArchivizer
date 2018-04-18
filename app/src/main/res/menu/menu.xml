@@ -22,9 +22,4 @@
         android:title="@string/database"
         android:orderInCategory="4"
         app:showAsAction="never"/>
-
-    <item android:id="@+id/action_add_to_database"
-        android:title="@string/add_to_database"
-        android:orderInCategory="5"
-        app:showAsAction="never" />
 </menu>

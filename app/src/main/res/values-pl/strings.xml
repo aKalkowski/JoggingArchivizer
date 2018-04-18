@@ -22,6 +22,14 @@
 
     <!--values for database activity-->
     <string name="save_distance">Zapisz do bazy danych</string>
+    <string name="select_activity">Wybierz aktywność:</string>
+    <string-array name="activity_options_database">
+        <item>Wszystkie</item>
+        <item>Marsz</item>
+        <item>Bieganie</item>
+        <item>Sprint</item>
+        <item>Jazda na rowerze</item>
+    </string-array>
 
     <!--values for options-->
     <string name="night_mode">Tryb nocny</string>
@@ -30,6 +38,12 @@
     <string name="height_name">Wzrost:</string>
     <string name="activity_label">Atywność: </string>
     <string name="save_data_button">Zapisz ustawienia</string>
+    <string name="delete_table">Wyczyść bazę danych</string>
+    <string name="delete_warning">Uwaga!</string>
+    <string name="dialog_delete_table">Napewno?\nWszystkie dane zostaną usunięte</string>
+    <string name="dialog_positive_response">Tak!</string>
+    <string name="dialog_negative_response">Nie</string>
+    <string name="dialog_data_not_deleted">Twoje postępy są bezpieczne... jak na razie...</string>
     <string-array name="activity_options">
         <item>Marsz</item>
         <item>Bieganie</item>

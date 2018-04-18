@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.andrzejkalkowski.joggingarchivizer.Model.Timer;
+import com.andrzejkalkowski.joggingarchivizer.Model.Training;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -16,19 +17,34 @@ import java.util.Calendar;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
-    public static final String DATABASE_NAME = "activities";
-    public static final int DATABASE_VERSION = 1;
+    private static DatabaseHelper instance;
+
+    private static final String DATABASE_NAME = "activities";
+    private static final String TABLE_NAME = "activity";
+    private static final int DATABASE_VERSION = 1;
 
     private Calendar calendar = Calendar.getInstance();
 
 
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static synchronized DatabaseHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DatabaseHelper(context.getApplicationContext());
+        }
+        return instance;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         updateDatabase(db, 0, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
     }
 
     @Override
@@ -48,14 +64,38 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     }
 
-    private void insertActivity(SQLiteDatabase db, String activity, double avgSpeed, long distance, int time) {
+    public void deleteAllRecords(SQLiteDatabase db) {
+        db.execSQL("DELETE FROM " + TABLE_NAME);
+    }
 
+    public void addActivity(SQLiteDatabase db, Training training) {
         ContentValues values = new ContentValues();
         values.put("date", DateFormat.getDateInstance().format(calendar.getTime()));
-        values.put("activity",activity );
-        values.put("average_speed", avgSpeed);
-        values.put("distance", distance);
+        values.put("activity",training.getActivityType() );
+        values.put("average_speed", training.getAverageSpeed());
+        values.put("distance", training.getDistance());
         values.put("time", Timer.seconds);
-        db.insert("activity", null, values);
+        db.insert(TABLE_NAME, null, values);
+    }
+
+    public void selectFromDatabase(SQLiteDatabase db, String activityName) {
+
+    }
+
+    public void selectAllActivities(SQLiteDatabase db) {
+
+    }
+
+
+    public static String getDbName() {
+        return DATABASE_NAME;
+    }
+
+    public static int getDatabaseVersion() {
+        return DATABASE_VERSION;
+    }
+
+    public static String getTableName() {
+        return TABLE_NAME;
     }
 }

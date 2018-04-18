@@ -1,8 +1,12 @@
 package com.andrzejkalkowski.joggingarchivizer.Controller;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
@@ -10,16 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.andrzejkalkowski.joggingarchivizer.Model.Helpers.DatabaseHelper;
 import com.andrzejkalkowski.joggingarchivizer.R;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
 public class OptionsActivity extends AppCompatActivity {
@@ -33,9 +40,14 @@ public class OptionsActivity extends AppCompatActivity {
     private final String PREFERENCES_GENDER = "gender";
     private final String PREFERENCES_ACTIVITY_INDEX = "activityIndex";
     private final String PREFERENCES_GENDER_INDEX = "genderIndex";
+    private final String PREFERENCES_WAS_NIGHT_MODE_ENABLED = "wasNightModeEnabled";
+
+    private DatabaseHelper helper;
+    private SQLiteDatabase database;
 
     private double weight;
     private boolean nightModeEnabled;
+    private boolean wasNightModeEnabled;
     private ArrayAdapter<String> arrayAdapter;
     private String[] activityValues;
     private String[] genderValues;
@@ -58,6 +70,9 @@ public class OptionsActivity extends AppCompatActivity {
     @BindView(R.id.edit_weight)
     public EditText weightEdit;
 
+    @BindView(R.id.button_delete_table)
+    public Button deleteButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +81,11 @@ public class OptionsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         activityValues = getResources().getStringArray(R.array.activity_options);
         genderValues = getResources().getStringArray(R.array.gender_options);
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, activityValues);
+        arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, activityValues);
         activityOptions.setAdapter(arrayAdapter);
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, genderValues);
+        arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, genderValues);
         genderOptions.setAdapter(arrayAdapter);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
     }
@@ -76,7 +93,7 @@ public class OptionsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean created = super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         menu.getItem(1).setChecked(true);
         return created;
     }
@@ -103,6 +120,34 @@ public class OptionsActivity extends AppCompatActivity {
 
     //TODO: implement reminding notifications for every day of week
 
+    @OnClick(R.id.button_delete_table)
+    public void deleteTable(View view) {
+        AlertDialog alert = new AlertDialog.Builder(this).create();
+        alert.setTitle(getResources().getString(R.string.delete_warning));
+        alert.setMessage(getResources().getString(R.string.dialog_delete_table));
+        alert.setButton(AlertDialog.BUTTON_POSITIVE,
+                getResources().getString(R.string.dialog_positive_response),
+                new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                helper = DatabaseHelper.getInstance(getApplicationContext());
+                database = helper.getWritableDatabase();
+                helper.deleteAllRecords(database);
+            }
+        });
+        alert.setButton(AlertDialog.BUTTON_NEGATIVE,
+                getResources().getString(R.string.dialog_negative_response),
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),
+                        getResources().getString(R.string.dialog_data_not_deleted),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        alert.show();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -122,15 +167,14 @@ public class OptionsActivity extends AppCompatActivity {
         if (isChecked) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             nightModeEnabled = true;
-            Toast.makeText(OptionsActivity.this,
-                    R.string.night_mode_toast, Toast.LENGTH_SHORT).show();
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             nightModeEnabled = false;
-            Toast.makeText(OptionsActivity.this,
-                    R.string.night_mode_toast_disabled, Toast.LENGTH_SHORT).show();
         }
-        saveData();
+        wasNightModeEnabled = nightModeEnabled;
+        if (isChecked != wasNightModeEnabled) {
+            saveData();
+        }
     }
 
 
@@ -152,6 +196,7 @@ public class OptionsActivity extends AppCompatActivity {
         editor.putString(PREFERENCES_GENDER, genderOptions.getSelectedItem().toString());
         editor.putInt(PREFERENCES_ACTIVITY_INDEX, activityOptions.getSelectedItemPosition());
         editor.putInt(PREFERENCES_GENDER_INDEX, genderOptions.getSelectedItemPosition());
+        editor.putBoolean(PREFERENCES_WAS_NIGHT_MODE_ENABLED, wasNightModeEnabled);
         if(editor.commit()) {
             Log.d(TAG, "saveData: Data saved");
             Toast.makeText(this, R.string.settings_save_success, Toast.LENGTH_SHORT).show();
@@ -164,6 +209,7 @@ public class OptionsActivity extends AppCompatActivity {
         weightEdit.setText(String.valueOf(weight));
         spinnerActivityIndex = sharedPreferences.getInt(PREFERENCES_ACTIVITY_INDEX, 0);
         spinnerGenderIndex = sharedPreferences.getInt(PREFERENCES_GENDER_INDEX, 0);
+        wasNightModeEnabled = sharedPreferences.getBoolean(PREFERENCES_WAS_NIGHT_MODE_ENABLED, false);
         if (nightModeEnabled) {
             nightModeSwitch.setChecked(true);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

@@ -6,12 +6,4 @@
     android:layout_height="match_parent"
     tools:context="com.andrzejkalkowski.joggingarchivizer.Controller.DatabaseActivity">
 
-    <ListView
-        android:id="@+id/activity_list"
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
