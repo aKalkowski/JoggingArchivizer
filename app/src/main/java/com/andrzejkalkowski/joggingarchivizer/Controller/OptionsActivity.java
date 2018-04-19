@@ -4,7 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -100,18 +101,19 @@ public class OptionsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_main:
-                Intent intent = new Intent(this, MainActivity.class);
+                intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_reminder:
-                Intent intent1 = new Intent(this, ReminderActivity.class);
-                startActivity(intent1);
+                intent = new Intent(this, ReminderActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_database:
-                Intent intent2 = new Intent(this, DatabaseActivity.class);
-                startActivity(intent2);
+                intent = new Intent(this, DatabaseActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -130,9 +132,9 @@ public class OptionsActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                helper = DatabaseHelper.getInstance(getApplicationContext());
-                database = helper.getWritableDatabase();
-                helper.deleteAllRecords(database);
+                new DatabaseTask().execute();
+                Toast.makeText(getApplicationContext(),
+                        R.string.dialog_delete_table, Toast.LENGTH_SHORT).show();
             }
         });
         alert.setButton(AlertDialog.BUTTON_NEGATIVE,
@@ -215,6 +217,29 @@ public class OptionsActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         Log.d(TAG, "restoreData: Data restored");
+    }
+
+    private class DatabaseTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                helper = DatabaseHelper.getInstance(getApplicationContext());
+                database = helper.getWritableDatabase();
+                helper.deleteAllRecords(database);
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (!success) {
+                Toast.makeText(OptionsActivity.this,
+                        "Database unavailable", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
 

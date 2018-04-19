@@ -69,6 +69,7 @@ public final class Training {
             this.activityType = activityType;
         }
 
+
         public TrainingBuilder distance(final double distance) {
             this.distance = distance;
             return this;

@@ -57,18 +57,19 @@ public class ReminderActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intent = new Intent(this, OptionsActivity.class);
+                intent = new Intent(this, OptionsActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_main:
-                Intent intent1 = new Intent(this, MainActivity.class);
-                startActivity(intent1);
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_database:
-                Intent intent2 = new Intent(this, DatabaseActivity.class);
-                startActivity(intent2);
+                intent = new Intent(this, DatabaseActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

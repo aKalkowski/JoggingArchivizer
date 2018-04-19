@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -126,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        helper = DatabaseHelper.getInstance(this);
-        database = helper.getWritableDatabase();
         restoreData();
         if (nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -148,18 +148,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intent = new Intent(this, OptionsActivity.class);
+                intent = new Intent(this, OptionsActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_reminder:
-                Intent intent1 = new Intent(this, ReminderActivity.class);
-                startActivity(intent1);
+                intent = new Intent(this, ReminderActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_database:
-                Intent intent2 = new Intent(this, DatabaseActivity.class);
-                startActivity(intent2);
+                intent = new Intent(this, DatabaseActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_add_to_database:
                 training = new Training.TrainingBuilder(activityView.getText().toString())
@@ -167,8 +168,7 @@ public class MainActivity extends AppCompatActivity {
                         .distance(distance)
                         .seconds(timer.getSeconds())
                         .build();
-                helper.addActivity(helper.getWritableDatabase(), training);
-                helper.close();
+                new DatabaseTask().execute(training);
                 Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
                 return true;
             default:
@@ -259,6 +259,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void restoreData() {
         nightMode = sharedPreferences.getBoolean(PREFERENCES_NIGHT_MODE, false);
+    }
+
+    private class DatabaseTask extends AsyncTask<Training, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Training... trainings) {
+            try {
+                helper = DatabaseHelper.getInstance(MainActivity.this);
+                database = helper.getWritableDatabase();
+                helper.addActivity(helper.getWritableDatabase(), trainings[0]);
+                helper.close();
+                return true;
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(!success) {
+                Toast.makeText(MainActivity.this, "Database unavailable",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     //TODO: implement calories calculator
