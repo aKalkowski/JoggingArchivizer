@@ -285,6 +285,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
     //TODO: implement calories calculator
 }

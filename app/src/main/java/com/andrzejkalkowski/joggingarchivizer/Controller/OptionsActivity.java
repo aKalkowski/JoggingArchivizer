@@ -122,33 +122,7 @@ public class OptionsActivity extends AppCompatActivity {
 
     //TODO: implement reminding notifications for every day of week
 
-    @OnClick(R.id.button_delete_table)
-    public void deleteTable(View view) {
-        AlertDialog alert = new AlertDialog.Builder(this).create();
-        alert.setTitle(getResources().getString(R.string.delete_warning));
-        alert.setMessage(getResources().getString(R.string.dialog_delete_table));
-        alert.setButton(AlertDialog.BUTTON_POSITIVE,
-                getResources().getString(R.string.dialog_positive_response),
-                new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                new DatabaseTask().execute();
-                Toast.makeText(getApplicationContext(),
-                        R.string.dialog_delete_table, Toast.LENGTH_SHORT).show();
-            }
-        });
-        alert.setButton(AlertDialog.BUTTON_NEGATIVE,
-                getResources().getString(R.string.dialog_negative_response),
-                new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(),
-                        getResources().getString(R.string.dialog_data_not_deleted),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        alert.show();
-    }
+
 
     @Override
     protected void onStart() {
@@ -178,6 +152,33 @@ public class OptionsActivity extends AppCompatActivity {
             saveData();
         }
     }
+
+    @OnClick(R.id.button_delete_table)
+    public void deleteTable(View view) {
+        AlertDialog alert = new AlertDialog.Builder(this).create();
+        alert.setTitle(getResources().getString(R.string.delete_warning));
+        alert.setMessage(getResources().getString(R.string.dialog_delete_table));
+        alert.setButton(AlertDialog.BUTTON_POSITIVE,
+                getResources().getString(R.string.dialog_positive_response),
+                new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new DatabaseTask().execute();
+                    }
+                });
+        alert.setButton(AlertDialog.BUTTON_NEGATIVE,
+                getResources().getString(R.string.dialog_negative_response),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(),
+                                getResources().getString(R.string.dialog_data_not_deleted),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+        alert.show();
+    }
+
 
 
     @OnItemSelected(R.id.gender_spinner)

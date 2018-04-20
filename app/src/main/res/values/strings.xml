@@ -31,6 +31,13 @@
         <item>Sprint</item>
         <item>Biking</item>
     </string-array>
+    <string name="delete_table">Delete all records in database</string>
+    <string name="delete_warning">Warning!</string>
+    <string name="dialog_delete_table">Are You sure?\nAll Your data will be deleted!</string>
+    <string name="dialog_positive_response">Yes!</string>
+    <string name="dialog_negative_response">No</string>
+    <string name="dialog_data_not_deleted">All your data is safe... so far.</string>
+
 
     <!--values for options-->
     <string name="night_mode">Night mode</string>
@@ -39,12 +46,6 @@
     <string name="height_name">Height:</string>
     <string name="activity_label">Activity: </string>
     <string name="save_data_button">Save options</string>
-    <string name="delete_table">Delete all records in database</string>
-    <string name="delete_warning">Warning!</string>
-    <string name="dialog_delete_table">Are You sure?\nAll Your data will be deleted!</string>
-    <string name="dialog_positive_response">Yes!</string>
-    <string name="dialog_negative_response">No</string>
-    <string name="dialog_data_not_deleted">All your data is safe... so far.</string>
     <string-array name="activity_options">
         <item>Walking</item>
         <item>Running</item>
